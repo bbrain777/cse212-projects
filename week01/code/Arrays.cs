@@ -12,8 +12,19 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+        // 1) Create a result array with the required number of elements.
+        // 2) Loop from index 0 to length - 1.
+        // 3) For each position, compute the multiple using number * (index + 1).
+        // 4) Store the computed value in the matching position in the result.
+        // 5) Return the populated array.
 
-        return []; // replace this return statement with your own
+        double[] result = new double[length];
+        for (int i = 0; i < length; ++i)
+        {
+            result[i] = number * (i + 1);
+        }
+
+        return result; // replace this return statement with your own
     }
 
     /// <summary>
@@ -29,5 +40,20 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+        // 1) Convert the rotation amount into an equivalent shift using modulo list size.
+        // 2) If the effective shift is 0, the list is already in the final order.
+        // 3) Capture the right-side segment that will move to the front.
+        // 4) Remove that segment from the end of the original list.
+        // 5) Insert the captured segment at index 0 to finish the rotation.
+        int shift = amount % data.Count;
+        if (shift == 0)
+        {
+            return;
+        }
+
+        int startIndex = data.Count - shift;
+        List<int> tail = data.GetRange(startIndex, shift);
+        data.RemoveRange(startIndex, shift);
+        data.InsertRange(0, tail);
     }
 }
