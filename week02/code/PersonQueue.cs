@@ -13,11 +13,13 @@ public class PersonQueue
     /// <param name="person">The person to add</param>
     public void Enqueue(Person person)
     {
-        _queue.Insert(0, person);
+        // For future review: queue enqueue must place new people at the back (FIFO).
+        _queue.Add(person);
     }
 
     public Person Dequeue()
     {
+        // For future review: dequeue removes from the front so turns happen in arrival order.
         var person = _queue[0];
         _queue.RemoveAt(0);
         return person;
