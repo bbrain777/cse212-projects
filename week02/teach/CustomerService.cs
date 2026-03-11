@@ -3,33 +3,39 @@
 /// added and allows customers to be serviced.
 /// </summary>
 public class CustomerService {
-    public static void Run() {
-        // Example code to see what's in the customer service queue:
-        // var cs = new CustomerService(10);
-        // Console.WriteLine(cs);
+public static void Run() {
+    Console.WriteLine("Test 1 - Invalid max size defaults to 10");
+    var t1 = new CustomerService(0);
+    Console.WriteLine(t1); // expect max_size=10
+    Console.WriteLine("Defect(s) Found: none (constructor already correct)");
+    Console.WriteLine("=================");
 
-        // Test Cases
+    Console.WriteLine("Test 2 - Full queue should reject add when size is 1");
+    var t2 = new CustomerService(1);
+    Console.SetIn(new StringReader("Tom\nA1\nLogin issue\nSue\nA2\nBilling issue\n"));
+    t2.AddNewCustomer();
+    t2.AddNewCustomer(); // expect error message: Maximum Number of Customers in Queue.
+    Console.WriteLine(t2); // expect size=1
+    Console.WriteLine("Defect(s) Found: fixed full-queue check (>=)");
+    Console.WriteLine("=================");
 
-        // Test 1
-        // Scenario: 
-        // Expected Result: 
-        Console.WriteLine("Test 1");
+    Console.WriteLine("Test 3 - Serve should be FIFO");
+    var t3 = new CustomerService(3);
+    Console.SetIn(new StringReader("First\nF1\nIssue 1\nSecond\nS2\nIssue 2\n"));
+    t3.AddNewCustomer();
+    t3.AddNewCustomer();
+    t3.ServeCustomer(); // expect First...
+    Console.WriteLine(t3); // expect only Second remains
+    Console.WriteLine("Defect(s) Found: fixed serve order (capture first before remove)");
+    Console.WriteLine("=================");
 
-        // Defect(s) Found: 
+    Console.WriteLine("Test 4 - Serving empty queue should not crash");
+    var t4 = new CustomerService(2);
+    t4.ServeCustomer(); // expect: No customers in the queue.
+    Console.WriteLine("Defect(s) Found: fixed empty-queue guard");
+    Console.WriteLine("=================");
+}
 
-        Console.WriteLine("=================");
-
-        // Test 2
-        // Scenario: 
-        // Expected Result: 
-        Console.WriteLine("Test 2");
-
-        // Defect(s) Found: 
-
-        Console.WriteLine("=================");
-
-        // Add more Test Cases As Needed Below
-    }
 
     private readonly List<Customer> _queue = new();
     private readonly int _maxSize;
@@ -67,7 +73,7 @@ public class CustomerService {
     /// </summary>
     private void AddNewCustomer() {
         // Verify there is room in the service queue
-        if (_queue.Count > _maxSize) {
+        if (_queue.Count >= _maxSize) {
             Console.WriteLine("Maximum Number of Customers in Queue.");
             return;
         }
@@ -87,11 +93,16 @@ public class CustomerService {
     /// <summary>
     /// Dequeue the next customer and display the information.
     /// </summary>
-    private void ServeCustomer() {
-        _queue.RemoveAt(0);
-        var customer = _queue[0];
-        Console.WriteLine(customer);
+private void ServeCustomer() {
+    if (_queue.Count == 0) {
+        Console.WriteLine("No customers in the queue.");
+        return;
     }
+
+    var customer = _queue[0];
+    _queue.RemoveAt(0);
+    Console.WriteLine(customer);
+}
 
     /// <summary>
     /// Support the WriteLine function to provide a string representation of the
