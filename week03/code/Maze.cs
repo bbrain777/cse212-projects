@@ -25,14 +25,28 @@ public class Maze
         _mazeMap = mazeMap;
     }
 
-    // TODO Problem 4 - ADD YOUR CODE HERE
+    // Olaku: this helper keeps the four movement methods small and consistent,
+    // so when you review the file later you only have one wall-check rule to understand.
+    private void Move(int directionIndex, int xChange, int yChange)
+    {
+        var moves = _mazeMap[(_currX, _currY)];
+        if (!moves[directionIndex])
+        {
+            throw new InvalidOperationException("Can't go that way!");
+        }
+
+        _currX += xChange;
+        _currY += yChange;
+    }
+
     /// <summary>
     /// Check to see if you can move left.  If you can, then move.  If you
     /// can't move, throw an InvalidOperationException with the message "Can't go that way!".
     /// </summary>
     public void MoveLeft()
     {
-        // FILL IN CODE
+        // Olaku: index 0 in the maze map means "left", so x decreases by 1 here.
+        Move(0, -1, 0);
     }
 
     /// <summary>
@@ -41,7 +55,8 @@ public class Maze
     /// </summary>
     public void MoveRight()
     {
-        // FILL IN CODE
+        // Olaku: index 1 means "right", so x increases by 1.
+        Move(1, 1, 0);
     }
 
     /// <summary>
@@ -50,7 +65,8 @@ public class Maze
     /// </summary>
     public void MoveUp()
     {
-        // FILL IN CODE
+        // Olaku: index 2 means "up", so y decreases by 1 in this coordinate system.
+        Move(2, 0, -1);
     }
 
     /// <summary>
@@ -59,7 +75,8 @@ public class Maze
     /// </summary>
     public void MoveDown()
     {
-        // FILL IN CODE
+        // Olaku: index 3 means "down", so y increases by 1.
+        Move(3, 0, 1);
     }
 
     public string GetStatus()
