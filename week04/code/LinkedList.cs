@@ -32,7 +32,22 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void InsertTail(int value)
     {
-        // TODO Problem 1
+        // I create the new node first so the rest of the method can focus only on wiring it in.
+        Node newNode = new(value);
+
+        // If your list is empty, this one node has to become both the head and the tail.
+        if (_tail is null)
+        {
+            _head = newNode;
+            _tail = newNode;
+        }
+        // Otherwise, I connect the current tail to the new node and then move the tail marker.
+        else
+        {
+            newNode.Prev = _tail; // This lets the new node point back to the old last item.
+            _tail.Next = newNode; // This lets the old last item point forward to the new node.
+            _tail = newNode; // This finishes the insert by declaring the new node as the tail.
+        }
     }
 
 
@@ -64,7 +79,18 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void RemoveTail()
     {
-        // TODO Problem 2
+        // If head and tail match, your list has either one node or no nodes, so removing tail empties it.
+        if (_head == _tail)
+        {
+            _head = null;
+            _tail = null;
+        }
+        // If there are multiple nodes, I only need to detach the current tail and move tail backward.
+        else if (_tail is not null)
+        {
+            _tail.Prev!.Next = null; // The new tail should no longer point to the node we are removing.
+            _tail = _tail.Prev; // Shift the tail reference back one node to complete the removal.
+        }
     }
 
     /// <summary>
@@ -108,7 +134,34 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Remove(int value)
     {
-        // TODO Problem 3
+        // I walk from the head forward because the assignment asks me to remove the first matching value.
+        Node? curr = _head;
+        while (curr is not null)
+        {
+            if (curr.Data == value)
+            {
+                // If the match is the head, I reuse the tested head-removal logic instead of duplicating it.
+                if (curr == _head)
+                {
+                    RemoveHead();
+                }
+                // If the match is the tail, I reuse the tested tail-removal logic for the same reason.
+                else if (curr == _tail)
+                {
+                    RemoveTail();
+                }
+                // For a middle node, I reconnect the neighbors around it so the list stays intact.
+                else
+                {
+                    curr.Prev!.Next = curr.Next; // Skip over the current node from the left side.
+                    curr.Next!.Prev = curr.Prev; // Skip over the current node from the right side.
+                }
+
+                return; // I stop here because only the first matching value should be removed.
+            }
+
+            curr = curr.Next; // Keep searching until I find the first match or hit the end.
+        }
     }
 
     /// <summary>
@@ -116,7 +169,17 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public void Replace(int oldValue, int newValue)
     {
-        // TODO Problem 4
+        // I scan the whole list because this task wants every matching value updated, not just the first one.
+        Node? curr = _head;
+        while (curr is not null)
+        {
+            if (curr.Data == oldValue)
+            {
+                curr.Data = newValue; // Only the stored value changes; the node links stay exactly the same.
+            }
+
+            curr = curr.Next; // Move forward so every node gets checked.
+        }
     }
 
     /// <summary>
@@ -146,8 +209,13 @@ public class LinkedList : IEnumerable<int>
     /// </summary>
     public IEnumerable Reverse()
     {
-        // TODO Problem 5
-        yield return 0; // replace this line with the correct yield return statement(s)
+        // I start at the tail because reverse order means reading the list from back to front.
+        var curr = _tail;
+        while (curr is not null)
+        {
+            yield return curr.Data; // Give back the current value before moving one step backward.
+            curr = curr.Prev; // Follow the previous link to continue the reverse traversal.
+        }
     }
 
     public override string ToString()

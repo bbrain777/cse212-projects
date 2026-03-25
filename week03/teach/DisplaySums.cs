@@ -1,8 +1,6 @@
-using Microsoft.VisualBasic;
-
 public static class DisplaySums {
     public static void Run() {
-        // Example 1: find every pair that adds up to 10.
+        // I start with a simple ordered list so you can quickly confirm the pair logic is working.
         DisplaySumPairs([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         // Should show something like (order does not matter):
         // 6 4
@@ -10,18 +8,17 @@ public static class DisplaySums {
         // 8 2
         // 9 1 
 
-        // Separator to make the output easier to read.
+        // I print a separator here so each practice case is easier for you to read in the console.
         Console.WriteLine("------------");
-        // Example 2: this list includes negative numbers and zero.
+        // I included negatives and zero in this case so you can review that the same rule still works.
         DisplaySumPairs([-20, -15, -10, -5, 0, 5, 10, 15, 20]);
         // Should show something like (order does not matter):
         // 10 0
         // 15 -5
         // 20 -10
 
-        // Separator to make the output easier to read.
+        // I use one more mixed example here so you can review the pattern on less predictable values.
         Console.WriteLine("------------");
-        // Example 3: another mixed list to verify the logic still works.
         DisplaySumPairs([5, 11, 2, -4, 6, 8, -1]);
         // Should show something like (order does not matter):
         // 8 2
@@ -35,19 +32,16 @@ public static class DisplaySums {
     /// </summary>
     /// <param name="numbers">array of integers</param>
     private static void DisplaySumPairs(int[] numbers) {
-        // Store numbers we have already visited.
+        // I keep track of numbers already visited so I can find each matching pair in one pass.
         var valuesSeen = new HashSet<int>();
 
-        // Read each number once.
-        foreach (var n in numbers) {
-            // If the matching number needed to make 10 was seen earlier,
-            // we have found a valid pair.
-            if (valuesSeen.Contains(10 - n)) {
-                Console.WriteLine($"{n} {10 - n}");
-            }
+        foreach (var number in numbers) {
+            // If the partner needed to make 10 was seen earlier, I print the pair immediately.
+            if (valuesSeen.Contains(10 - number))
+                Console.WriteLine($"{number} {10 - number}");
 
-            // Save the current number so later values can pair with it.
-            valuesSeen.Add(n);
+            // I record the current number so later values can match with it.
+            valuesSeen.Add(number);
         }
     }
 }
