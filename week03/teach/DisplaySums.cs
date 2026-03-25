@@ -1,6 +1,6 @@
 public static class DisplaySums {
     public static void Run() {
-        // I start with a simple ordered list so you can quickly confirm the pair logic is working.
+        // I start with a simple ordered list so you can review the pair logic with the easiest case first.
         DisplaySumPairs([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         // Should show something like (order does not matter):
         // 6 4
@@ -17,7 +17,7 @@ public static class DisplaySums {
         // 15 -5
         // 20 -10
 
-        // I use one more mixed example here so you can review the pattern on less predictable values.
+        // I use one more mixed example here so you can review the pattern on less predictable values for Week 03 practice.
         Console.WriteLine("------------");
         DisplaySumPairs([5, 11, 2, -4, 6, 8, -1]);
         // Should show something like (order does not matter):
